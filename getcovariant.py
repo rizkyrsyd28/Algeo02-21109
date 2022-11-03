@@ -3,7 +3,7 @@ import cv2
 from averageface import avgFace
 
 def getCov(avgimage):
-    res = np.empty(shape=(65536, 0))
+    res = np.empty(shape=(65536, 0), dtype=int)
 
     for i in range(1, 99):
         path = "../ALGEO02-21109/data/gray/CR" + str(i) + ".png";
