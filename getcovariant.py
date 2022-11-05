@@ -21,4 +21,5 @@ if __name__ == "__main__":
     img = avgFace()
     covid = getCov(img)
     print(covid)
+    print(covid.shape)
 
