@@ -27,6 +27,10 @@ def qrFactorization(Cov, row, col) :
 
         UCol = np.subtract(CovCol,subt)
 
+        if (np.linalg.norm(UCol) == 0) : 
+            print("Matrix has linearly dependent columns")
+            return None
+
         Q[:,i] = UCol/np.linalg.norm(UCol)
 
     return Q    
