@@ -3,7 +3,7 @@ import cv2
 from eigenVector import *
 
 def getDifferences(im,avgimage):
-    res = np.empty(shape=(98, 98), dtype=int)
+    res = np.empty(shape=(256, 256), dtype=int)
 
     for i in range(1, 99):
         temp = np.subtract(im, avgimage)
@@ -16,9 +16,9 @@ def getDifferences(im,avgimage):
 
 def eigenFaces(V, avgimage) :
 
-    eFace = np.empty(shape=(98, 98, 98), dtype=float)
+    eFace = np.empty(shape=(256, 256, 256), dtype=float)
 
-    for i in range(1, 98):
+    for i in range(1, 256):
         path = "../ALGEO02-21109/data/gray/CR" + str(i) + ".png";
         im = cv2.imread(path, 0)
         sub = np.subtract(im, avgimage)

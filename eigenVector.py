@@ -3,7 +3,7 @@ from qrFactorization import *
 
 def eigenVector(Cov) :
 
-    Q = qrFactorization(Cov, 98,98) 
+    Q = qrFactorization(Cov, 256,256) 
     E = np.matmul(np.transpose(Q),Cov)
     E = np.matmul(E,Q)
     V = Q
@@ -14,7 +14,7 @@ def eigenVector(Cov) :
     while (sum > 1e-15) :
         init = res
 
-        Q = qrFactorization(E, 98,98) 
+        Q = qrFactorization(E, 256,256) 
         E = np.matmul(np.transpose(Q),Cov)
         E = np.matmul(E,Q)
         V = np.matmul(V,Q)
@@ -27,10 +27,10 @@ def eigenVector(Cov) :
 if __name__ == "__main__":
     img = avgFace()
     covid = getCov(img)
-    V = np.empty(shape=(98, 98), dtype=int)
+    V = np.empty(shape=(256, 256), dtype=int)
 
-    row = 98
-    col = 98
+    # row = 256
+    # col = 256
     
     V = eigenVector(covid)
     print(V)
