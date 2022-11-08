@@ -1,3 +1,6 @@
+#include <Rcpp.h>
+#include <stdio.h>
+
 // [[Rcpp::export]]
 
 List myQRCpp(NumericMatrix A) {
@@ -24,7 +27,8 @@ List myQRCpp(NumericMatrix A) {
     }
     Ucol = Acol - subt;
   }
-  for(int i = 0; i < b; i++){
+
+  for(int i = 0; i < b; i++){  // Cari Q[:,i]
     NumericMatrix::Column ui = U(_ , i);
     NumericMatrix::Column qi = Q(_ , i);
     
