@@ -1,6 +1,7 @@
 import numpy as np
 from averageface import avgFace
 from getcovariant import getCov
+from tabulate import tabulate
 
 def vecProjection (x, y) :
     return np.dot(x, y) / np.linalg.norm(y)
