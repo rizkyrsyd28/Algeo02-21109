@@ -8,7 +8,7 @@ def avgFace():
         img = cv2.imread(path, 0);
         init = np.add(init, img);
     
-    init = np.multiply(1/99, init);
+    init = np.multiply(1/98, init);
     init = init.astype(np.uint8);
     return init;
 
