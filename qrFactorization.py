@@ -1,6 +1,7 @@
 import numpy as np
 from averageface import avgFace
 from getcovariant import getCov
+from tabulate import tabulate
 
 def vecProjection (x, y) :
     return np.dot(x, y) / np.linalg.norm(y)
@@ -26,6 +27,10 @@ def qrFactorization(Cov, row, col) :
             j += 1
 
         UCol = np.subtract(CovCol,subt)
+
+        if (np.linalg.norm(UCol) == 0) : 
+            print("Matrix has linearly dependent columns")
+            return None
 
         Q[:,i] = UCol/np.linalg.norm(UCol)
 
