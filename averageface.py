@@ -14,6 +14,7 @@ def avgFace():
     return init;
 
 # img = cv2.imread("../ALGEO-2/data/gray/CR1.png", 0);
+
 im = avgFace();
 cv2.imshow("sewey", im);
 cv2.waitKey(0);
