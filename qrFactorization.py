@@ -34,6 +34,8 @@ def qrFactorization(Cov, row, col) :
             print("Matrix has linearly dependent columns")
             return None
 
+        if i == col-1 :
+            UCol = -UCol
         Q[:,i] = np.multiply(UCol,1/np.linalg.norm(UCol))
 
     return Q    
@@ -54,10 +56,10 @@ def inputFromKeyBoard(row,col) :
 if __name__ == "__main__":
     # Untuk testing masih ada hasil nan, 
     # mungkin bilangan kompleks atau pembagian dengan 0
-    res = np.empty(shape=(4, 4), dtype=int)
-    res = inputFromKeyBoard(4,4)
-    row = 4
-    col = 4
+    res = np.empty(shape=(5, 5), dtype=int)
+    res = inputFromKeyBoard(5,5)
+    row = 5
+    col = 5
 
     Q = qrFactorization(res, row, col)
     R = getR(Q,res)
