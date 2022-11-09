@@ -69,8 +69,8 @@ if __name__ == "__main__":
     print(tabulate(Q))
     print(tabulate(Q1))
 
-    # print(tabulate(R))
-    # print(tabulate(R1))
+    print(tabulate(R))
+    print(tabulate(R1))
     
 
 
@@ -91,10 +91,13 @@ if __name__ == "__main__":
     # x1, y1 = Q1.shape
     # x, y = Q.shape
     
-    # for i in range(x) :
-    #     for j in range(y):
-    #         if (Q1[i][j] != Q[i][j]) :
-    #             print(Q1[i][j], Q[i][j])
+    # for i in range(x1) :
+    #     for j in range(y1):
+
+            # if (Q1[i][j] != Q[i][j]) :
+            #     print(Q1[i][j], Q[i][j])
+        
+    # print(tabulate(R))
+    # print(np.matmul(Q1,R), covid)
                 
-    #             break
         
