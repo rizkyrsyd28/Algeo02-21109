@@ -23,3 +23,20 @@ A <- matrix(
 )
 
 print(myQR(A))
+
+
+my_eigen <- function(A, margin = 1e-20) {
+  Q <- myc_qr(A)$Q
+  E <- t(Q) %*% A %*% Q
+  U <- Q
+  res <- diag(E)
+  init <- diag(A)
+  while (sum((init - res)^2) > margin) {
+    init <- res
+    Q <- myc_qr(E)$Q
+    E <- t(Q) %*% E %*% Q
+    U <- U %*% Q
+    res <- diag(E)
+  }
+  return(list(values = round(diag(E), 6), vecotrs = U))
+}
