@@ -1,12 +1,17 @@
-import tkinter as tk
+from tkinter import *
 from tkinter import filedialog
+import tkinter as tk
 from PIL import Image, ImageTk
 import tkinter.messagebox
 import customtkinter
 import cv2
 
-customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
-customtkinter.set_default_color_theme("green")  # Themes: "blue" (standard), "green", "dark-blue"
+customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
+customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
+
+def crop_cam(mat):
+    height, width, _ = mat.shape
+    center = width//2
 
 
 class App(customtkinter.CTk):
@@ -17,7 +22,8 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("CustomTkinter complex_example.py")
+        self.cap = cv2.VideoCapture(1)
+        self.title("Eigenface")
         self.geometry(f"{App.WIDTH}x{App.HEIGHT}")
         self.protocol("WM_DELETE_WINDOW", self.on_closing)  # call .on_closing() when app gets closed
 
@@ -35,10 +41,10 @@ class App(customtkinter.CTk):
         # ============ frame_left ============
 
         # configure grid layout (1x11)
-        self.frame_left.grid_rowconfigure(0, minsize=10)   # empty row with minsize as spacing
+        # self.frame_left.grid_rowconfigure(0, minsize=10)   # empty row with minsize as spacing
         self.frame_left.grid_rowconfigure(7, weight=1)  # empty row as spacing
-        self.frame_left.grid_rowconfigure(8, minsize=20)    # empty row with minsize as spacing
-        self.frame_left.grid_rowconfigure(11, minsize=10)  # empty row with minsize as spacing
+        # self.frame_left.grid_rowconfigure(8, minsize=20)    # empty row with minsize as spacing
+        # self.frame_left.grid_rowconfigure(11, minsize=10)  # empty row with minsize as spacing
 
         self.label_1 = customtkinter.CTkLabel(master=self.frame_left,
                                               text="EigenFace",
@@ -62,7 +68,7 @@ class App(customtkinter.CTk):
         self.button_insert_fld = customtkinter.CTkButton(master=self.frame_left,
                                                 text="Choose Folder",
                                                 text_font=("SF Pro Text", 10),
-                                                command=self.button_event)
+                                                command=self.on_cam)
         self.button_insert_fld.grid(row=5, column=0, pady=10, padx=20)
 
         self.label_mode = customtkinter.CTkLabel(master=self.frame_left, text="Theme :")
@@ -88,18 +94,25 @@ class App(customtkinter.CTk):
 
         self.image_output = customtkinter.CTkLabel(master = self.subframeR_2, text="Output Image", width=400, height=400)
         self.image_output.grid(row=1, column=0, pady=10, padx=10)
-        
+
     def button_event(self):
         print("Button pressed")
-    
+
+    def on_cam(self):
+        self.img = self.cap.read()[1]
+        self.imgBGR= cv2.cvtColor(self.img,cv2.COLOR_BGR2RGB)
+        self.cam = Image.fromarray(self.imgBGR)
+        self.imgTk = ImageTk.PhotoImage(image=self.cam.resize((500,500)))
+        self.image_output.configure(image=self.imgTk)
+        self.image_input.after(20,self.on_cam)
+
+
     def open_image(self):
         self.filename = filedialog.askopenfile()
         # self.img = cv2.imread(self.filename.name)
         self.img = Image.open(self.filename.name)
         self.imgtk = ImageTk.PhotoImage(self.img.resize((500,500)))
-        self.labelimage.config(image = self.imgtk)
-
-
+        self.image_input.config(image = self.imgtk)
 
     def change_appearance_mode(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
