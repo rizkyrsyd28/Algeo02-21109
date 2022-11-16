@@ -39,6 +39,15 @@ def eigenValVec(A, margin = 1e-20):
     vectors = u
     return (res, vectors)
 
+def sortEigenVectors(eigenVal, eigenVec):
+    arrIdx = eigenVal.argsort()
+    eigenValRes = eigenVal[arrIdx[::-1]]
+    eigenVecRes = np.copy(eigenVec)
+    x, y = eigenVec.shape
+    for i in range(x):
+        eigenVecRes[i, :] = (eigenVec[i, :])[arrIdx[::-1]]
+    return eigenValRes, eigenVecRes
+
 def getAdjustedVector(mat, eVec):
     res = np.empty([65536, 0], dtype=float)
     x, y = eVec.shape
@@ -50,7 +59,8 @@ def getAdjustedVector(mat, eVec):
     
     return res
 
-def displayEigenFaces(uVec, k = 98):
+def displayEigenFaces(uVec, k):
+    # Ganti biar ukuran training image bisa beragam
     adjusted = np.empty([256, 256, 0], dtype=float)
     for i in range(k+1):
         temp = np.reshape(uVec[:, i], [256, 256, 1])
@@ -69,6 +79,7 @@ def addKZeros(arr, K):
         res = np.append(res, 0, axis=1)
     return res
 
+# Ganti biar ukuran training image bisa beragam
 def getLinearCombination(aMat, uVec, K = 98, coefNum = 98):
     linComb = np.empty([K, 0], dtype=float)
     kBest = uVec[:, :K]
@@ -87,6 +98,7 @@ def getClosest(avg, test, coefMat, kValue, uVec):
     normal = np.reshape(normal, [65536, 1])
     testCoefficient = getLinearCombination(normal, uVec, kValue, 1)[:, 0]
     absoluteDifference = np.empty([0, 1], dtype=float)
+    # Ganti biar ukuran training image bisa beragam
     for i in range(98):
         temp = np.absolute(testCoefficient - coefMat[:, i])
         tempSum = np.sum(temp)
@@ -98,7 +110,7 @@ def getClosest(avg, test, coefMat, kValue, uVec):
 
 if __name__ == "__main__":
     myimg = averageface.avgFace()
-    testImgPath = "../ALGEO02-21109/data/test/crsewey.png";
+    testImgPath = "../ALGEO02-21109/data/gray/CR55.png";
     testImg = cv2.imread(testImgPath, 0)
     curCov, aMat = getcovariant.getCovAlt(myimg)
     # print(curCov)
@@ -112,7 +124,8 @@ if __name__ == "__main__":
     # print("r:\n", r.round(6))
     # M = np.matmul(q, r)
     # print("Multiplication result:\n", M.round(6))
-    # eVal, eVec = eigenValVec(curCov)
+    eVal, eVec = eigenValVec(curCov)
+    eVal, eVec = sortEigenVectors(eVal, eVec)
     # arrinds = eVal.argsort()
     # eVal = eVal[arrinds[::-1]]
     # eVec = eVec[arrinds[::-1]]
@@ -120,18 +133,26 @@ if __name__ == "__main__":
     # print(eVal)
     # print("Eigenvectors:")
     # print(eVec)
-    # uVec = getAdjustedVector(aMat, eVec)
+    uVec = getAdjustedVector(aMat, eVec)
     # np.savetxt('eigenvalue.txt', eVal, fmt='%.8f')
     # np.savetxt('adjusted_eigenvector.txt', uVec, fmt='%.8f')
-    uVec = np.loadtxt('adjusted_eigenvector.txt', dtype=int)
-    # displayEigenFaces(uVec, 15)
-    coef = getLinearCombination(aMat, uVec, 50)
-    closestIdx = getClosest(myimg, testImg, coef, 50, uVec)
+    # valveclist = np.linalg.eig(curCov)
+    # print("\nLibrary")    D
+    # eigenVal = valveclist[0]
+    # eigenVec = valveclist[1]
+    # eigenVal, eigenVec = sortEigenVectors(eigenVal, eigenVec)
+    # arrinds = eigenVal.argsort()
+    # eigenVal = eigenVal[arrinds[::-1]]
+    # eigenVec = eigenVec[arrinds[::-1]]
+    # uVector = getAdjustedVector(aMat, eigenVec)
+    # np.savetxt('eigenvalue_lib.txt', eigenVal, fmt='%.8f')
+    # np.savetxt('adjusted_eigenvector_lib.txt', uVector, fmt='%.8f')
+    # print(valveclist[1])
+    # uVec = np.loadtxt('adjusted_eigenvector.txt', dtype=float)
+    displayEigenFaces(uVec, 15)
+    coef = getLinearCombination(aMat, uVec, 15)
+    closestIdx = getClosest(myimg, testImg, coef, 15, uVec)
     print(closestIdx + 1)
     # print(coef)
     # linComb = getLinearCombination(aMat, uVec, 10)
-    # valveclist = np.linalg.eig(curCov)
-    # print("\nLibrary")
-    # print(valveclist[0])
-    # print(valveclist[1])
     # q, r = qr(curCov)
