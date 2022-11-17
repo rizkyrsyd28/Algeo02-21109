@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
-from averageface import avgFace
+from averageface import getAvgFace
+import os
 
 def getCov(avgimage):
     res = np.zeros([256, 256], dtype=int)
@@ -34,6 +35,21 @@ def getCovAlt(avgImg):
     res = np.matmul(transposed, res)
     return res, norm
 
+def getCovariant(avgImg, dir):
+    res = np.empty([65536, 0], dtype=int)
+    norm = np.empty([65536, 0], dtype=int)
+
+    for filename in os.scandir(dir):
+        if filename.is_file():
+            im = cv2.imread(filename.path, 0)
+            temp = np.subtract(im, avgImg)
+            temp = np.reshape(temp, [65536, 1])
+            norm = np.append(norm, temp, axis=1)
+            res = np.append(res, temp, axis=1)
+    
+    transposed = np.transpose(res)
+    res = np.matmul(transposed, res)
+    return res, norm
 
 if __name__ == "__main__":
     img = avgFace()

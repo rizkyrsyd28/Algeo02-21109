@@ -28,7 +28,7 @@ def eigenValVec(A, margin = 1e-20):
     u = q
     res = np.diagonal(e)
     init = np.diagonal(A)
-    for i in range(10000):
+    while (np.sum(np.square(res-init)) > margin):
         init = res
         q, r = qr(e)
         e = np.matmul(np.transpose(q), e)
@@ -99,7 +99,7 @@ def getClosest(avg, test, coefMat, kValue, uVec):
     testCoefficient = getLinearCombination(normal, uVec, kValue, 1)[:, 0]
     absoluteDifference = np.empty([0, 1], dtype=float)
     # Ganti biar ukuran training image bisa beragam
-    for i in range(98):
+    for i in range(50):
         temp = np.absolute(testCoefficient - coefMat[:, i])
         tempSum = np.sum(temp)
         absoluteDifference = np.append(absoluteDifference, tempSum)
@@ -109,10 +109,10 @@ def getClosest(avg, test, coefMat, kValue, uVec):
 
 
 if __name__ == "__main__":
-    myimg = averageface.avgFace()
-    testImgPath = "../ALGEO02-21109/data/gray/CR55.png";
+    myimg = averageface.getAvgFace("D:\ITB\Semester 3\Aljabar Liniear dan Geometri\Algeo02-21109\data\\newgray")
+    testImgPath = "../ALGEO02-21109/data/newgray/CR89.png"
     testImg = cv2.imread(testImgPath, 0)
-    curCov, aMat = getcovariant.getCovAlt(myimg)
+    curCov, aMat = getcovariant.getCovariant(myimg, "D:\ITB\Semester 3\Aljabar Liniear dan Geometri\Algeo02-21109\data\\newgray")
     # print(curCov)
     # contoh = np.array(
     #     [[26, 40, 41, 54],
@@ -125,6 +125,9 @@ if __name__ == "__main__":
     # M = np.matmul(q, r)
     # print("Multiplication result:\n", M.round(6))
     eVal, eVec = eigenValVec(curCov)
+    # valveclist = np.linalg.eig(curCov)
+    # eVal = valveclist[0]
+    # eVec = valveclist[1]
     eVal, eVec = sortEigenVectors(eVal, eVec)
     # arrinds = eVal.argsort()
     # eVal = eVal[arrinds[::-1]]
@@ -136,7 +139,6 @@ if __name__ == "__main__":
     uVec = getAdjustedVector(aMat, eVec)
     # np.savetxt('eigenvalue.txt', eVal, fmt='%.8f')
     # np.savetxt('adjusted_eigenvector.txt', uVec, fmt='%.8f')
-    # valveclist = np.linalg.eig(curCov)
     # print("\nLibrary")    D
     # eigenVal = valveclist[0]
     # eigenVec = valveclist[1]
@@ -149,7 +151,7 @@ if __name__ == "__main__":
     # np.savetxt('adjusted_eigenvector_lib.txt', uVector, fmt='%.8f')
     # print(valveclist[1])
     # uVec = np.loadtxt('adjusted_eigenvector.txt', dtype=float)
-    displayEigenFaces(uVec, 15)
+    # displayEigenFaces(uVec, 15)
     coef = getLinearCombination(aMat, uVec, 15)
     closestIdx = getClosest(myimg, testImg, coef, 15, uVec)
     print(closestIdx + 1)
