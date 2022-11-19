@@ -109,10 +109,10 @@ def getClosest(avg, test, coefMat, kValue, uVec):
 
 
 if __name__ == "__main__":
-    myimg = averageface.getAvgFace("D:\ITB\Semester 3\Aljabar Liniear dan Geometri\Algeo02-21109\data\\newgray")
+    myimg = averageface.getAvgFace(".\data\\newgray")
     testImgPath = "../ALGEO02-21109/data/newgray/CR89.png"
     testImg = cv2.imread(testImgPath, 0)
-    curCov, aMat = getcovariant.getCovariant(myimg, "D:\ITB\Semester 3\Aljabar Liniear dan Geometri\Algeo02-21109\data\\newgray")
+    curCov, aMat = getcovariant.getCovariant(myimg, "..\Algeo02-21109\data\\newgray")
     # print(curCov)
     # contoh = np.array(
     #     [[26, 40, 41, 54],
