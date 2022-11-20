@@ -4,12 +4,12 @@ import os
 
 def avgFace():
     init = np.zeros([256, 256], dtype=int)
-    for i in range(1,51):
+    for i in range(1,101):
         path = "../ALGEO02-21109/data/gray/Test" + str(i) + ".png";
         img = cv2.imread(path, 0)
         init = np.add(init, img)
     
-    init = np.multiply(1/98, init)
+    init = np.multiply(1/100, init)
     init = init.astype(np.uint8)
     return init
 
@@ -21,9 +21,7 @@ def getAvgFace(dir):
             img = cv2.imread(filename.path, 0)
             init = np.add(init, img)
             count += 1
-    a = 1/count
-    print(a)
-    init = np.multiply(a, init)
+    init = np.multiply(1/count, init)
     init = init.astype(np.uint8)
     return init
 
