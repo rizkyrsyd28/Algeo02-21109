@@ -1,21 +1,21 @@
 from tkinter import *
 from tkinter import filedialog
-import tkinter as tk
+# import tkinter as tk
 from PIL import Image, ImageTk
-import tkinter.messagebox 
+# import tkinter.messagebox 
 import customtkinter
 import cv2
-import time
+# import time
 
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
-customtkinter.set_default_color_theme("green")  # Themes: "blue" (standard), "green", "dark-blue"
+customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
 
 
 def crop_cam(mat):
     height, width, _ = mat.shape
     print(height, width, mat[0][0])
     center = width//2
-    mat = mat[0:height, center - height//2:center + height//2]
+    mat = mat[0:height, center - height//2: center + height//2]
     return mat
 
 class App(customtkinter.CTk):
@@ -27,11 +27,12 @@ class App(customtkinter.CTk):
         super().__init__()
 
         self.cap = cv2.VideoCapture(1)
-        self.status_cam = True
+        self.status_cam = False
         self.dir = ""
 
         self.result = 'NaN'
         self.count_time = 'NaN'
+        self.camera_status = 'Off'
 
         self.title("Eigenface")
         self.geometry(f"{App.WIDTH}x{App.HEIGHT}")
@@ -93,7 +94,7 @@ class App(customtkinter.CTk):
         self.title_oncam.grid(row=6, column=0, pady=10, padx=20)
 
         self.button_oncam = customtkinter.CTkSwitch(master=self.frame_left,
-                                                text="Turn On Camera",
+                                                text=f"Camera {self.camera_status}",
                                                 text_font=("SF Pro Text", 10),
                                                 command=self.on_cam, 
                                                 onvalue=1, 
@@ -124,7 +125,7 @@ class App(customtkinter.CTk):
         self.title_R1.grid(row=0, column=0, pady=10, padx=20, sticky="s")
 
         self.subframeR_1 = customtkinter.CTkFrame(master = self.frame_right, width=400, height=400,)
-        self.subframeR_1.grid(row=1, column=0, sticky="nswe", padx=20, pady=20)
+        self.subframeR_1.grid(row=1, column=0, sticky="nswe", padx=20, pady=0)
 
         self.image_input = customtkinter.CTkLabel(master = self.subframeR_1, text="Input Image", width=400, height=400)
         self.image_input.grid(row=1, column=0, pady=10, padx=10)
@@ -135,7 +136,7 @@ class App(customtkinter.CTk):
         self.title_R1.grid(row=0, column=1, pady=10, padx=20, sticky="s")
 
         self.subframeR_2 = customtkinter.CTkFrame(master = self.frame_right, width=400, height=400,)
-        self.subframeR_2.grid(row=1, column=1, sticky="nswe", padx=20, pady=20)
+        self.subframeR_2.grid(row=1, column=1, sticky="nswe", padx=20, pady=0)
 
         self.image_output = customtkinter.CTkLabel(master = self.subframeR_2, text="Output Image", width=400, height=400)
         self.image_output.grid(row=1, column=0, pady=10, padx=10)
@@ -152,13 +153,14 @@ class App(customtkinter.CTk):
     def on_cam(self):
         if not self.status_cam:
             self.cap = cv2.VideoCapture(1)
+            self.camera_status = "On"
             self.status_cam = True
         if self.button_oncam.get() == 1 :
             img = self.cap.read()[1]
             imgBGR= cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-            imgBGR = crop_cam(imgBGR)
-            cam = Image.fromarray(imgBGR)
-            self.imgTk = ImageTk.PhotoImage(image=cam.resize((400,400)))
+            imgcrop = crop_cam(imgBGR)
+            cam = Image.fromarray(imgcrop)
+            self.imgTk = ImageTk.PhotoImage(image=cam)
             self.image_input.configure(image=self.imgTk)
             self.image_input.after(20,self.on_cam)
         # i+=1
@@ -167,6 +169,7 @@ class App(customtkinter.CTk):
         else:
             self.image_input.configure(image='')
             self.status_cam = False
+            self.camera_status = "Off"
             self.cap.release()
             return
 
@@ -175,7 +178,7 @@ class App(customtkinter.CTk):
         # self.img = cv2.imread(self.filename.name)
         if (filename != None):
             img = Image.open(filename.name)
-            self.imgtk = ImageTk.PhotoImage(img.resize((500,500)))
+            self.imgtk = ImageTk.PhotoImage(img.resize((400,400)))
             self.image_input.config(image = self.imgtk)
         else:
             self.image_input.config(image = '')

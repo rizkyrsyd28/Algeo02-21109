@@ -1,4 +1,13 @@
-import os
+import cv2
 
-for i in os.listdir("C://tugas besar//ALGEO-2//data//color"):
-    print(i)
+cap = cv2.VideoCapture(1)
+
+img = cap.read()[1]
+print(img)
+
+cap.release()
+
+print(img)
+print(img)
+print(img)
+print(img)
