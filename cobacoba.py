@@ -15,8 +15,6 @@ if (__name__ == "__main__"):
         [-2, 3, 0],
         [0, 0, 5]])
     eVal, eVec = cobaduluyamaas.eigenValVec(testArr, 1e-10000)
+    eVal, eVec = cobaduluyamaas.sortEigenVectors(eVal, eVec)
     print(eVal)
     print(eVec)
-    test = np.linalg.eig(testArr)
-    print(test[0])
-    print(test[1])
