@@ -21,17 +21,15 @@ def getAvgFace(dir):
             img = cv2.imread(filename.path, 0)
             init = np.add(init, img)
             count += 1
-    init = init / count
+    a = 1/count
+    print(a)
+    init = np.multiply(a, init)
     init = init.astype(np.uint8)
     return init
 
 # img = cv2.imread("../ALGEO-2/data/gray/CR1.png", 0);
 if __name__ == "__main__":
-    im = getAvgFace("D:\ITB\Semester 3\Aljabar Liniear dan Geometri\Algeo02-21109\data\\newgray");
-    cv2.imshow("cobaaja", im);
-    cv2.waitKey(0);
-    cv2.destroyAllWindows();
-    im = avgFace();
+    im = getAvgFace(".\data\gray");
     cv2.imshow("cobaaja", im);
     cv2.waitKey(0);
     cv2.destroyAllWindows();
