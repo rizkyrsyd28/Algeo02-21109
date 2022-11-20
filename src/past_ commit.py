@@ -4,7 +4,8 @@ import averageface
 import matplotlib.pyplot as plt
 import cv2
 from os.path import exists
-import time
+import os
+import natsort
 
 def qr(A):
     m, n = A.shape
@@ -120,7 +121,19 @@ def predictImageIndex(testImagePath, trainingPath):
         np.savetxt('eigenVec.txt', uVec, fmt='%.8f')
     coef = getLinearCombination(AMatrix, uVec, 15)
     closestIdx = getClosest(avgImg, testImg, coef, 15, uVec)
-    print(closestIdx + 1)
+    resultPath = getImagePath(closestIdx, trainingPath)
+    return resultPath
+
+def getImagePath(index, path):
+    fileList = []
+    for path in os.listdir(dir):
+        if os.path.isfile(os.path.join(dir, path)):
+            fileList.append(path)
+
+    fileList = natsort.natsorted(fileList, key=lambda y: y.lower())
+    fileName = fileList[index - 1]
+    filePath = path + fileName
+    return filePath
         
 
 if __name__ == "__main__":
