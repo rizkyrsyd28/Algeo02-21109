@@ -2,6 +2,7 @@ import numpy as np
 import cv2
 from averageface import getAvgFace, avgFace
 import os
+import natsort
 
 def getCov(avgimage):
     res = np.zeros([256, 256], dtype=int)
@@ -23,7 +24,7 @@ def getCovAlt(avgImg):
     res = np.empty([65536, 0], dtype=int)
     norm = np.empty([65536, 0], dtype=int)
 
-    for i in range(1, 51):
+    for i in range(1, 101):
         path = "../ALGEO02-21109/data/gray/Test" + str(i) + ".png";
         im = cv2.imread(path, 0)
         temp = np.subtract(im, avgImg)
@@ -39,14 +40,21 @@ def getCovariant(avgImg, dir):
     res = np.empty([65536, 0], dtype=int)
     norm = np.empty([65536, 0], dtype=int)
 
-    for filename in os.scandir(dir):
-        if filename.is_file():
-            im = cv2.imread(filename.path, 0)
-            temp = np.subtract(im, avgImg)
-            temp = np.reshape(temp, [65536, 1])
-            norm = np.append(norm, temp, axis=1)
-            res = np.append(res, temp, axis=1)
-    
+    fileList = []
+    for path in os.listdir(dir):
+        if os.path.isfile(os.path.join(dir, path)):
+            fileList.append(path)
+
+    fileList = natsort.natsorted(fileList, key=lambda y: y.lower())
+
+    for fileName in fileList:
+        curPath = dir + fileName
+        im = cv2.imread(curPath, 0)
+        temp = np.subtract(im, avgImg)
+        temp = np.reshape(temp, [65536, 1])
+        norm = np.append(norm, temp, axis=1)
+        res = np.append(res, temp, axis=1)
+
     transposed = np.transpose(res)
     res = np.matmul(transposed, res)
     return res, norm
