@@ -20,11 +20,10 @@ def convertToGray(dir, output):
             print('Failed to delete %s. Reason: %s' % (file_path, e))
 
     c = 1
-    print(fileList)
     for filename in fileList:
         path1 = os.path.join(dir, filename)
         img = cv2.imread(path1, 0)
-        img = cv2.resize(img, (256, 256))
+        img = cv2.resize(img, (256, 256)) 
         name = "Test" + str(c) + ".png"
         cv2.imwrite(output + name, img)
         c+=1;
