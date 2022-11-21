@@ -46,7 +46,6 @@ def getCovariant(avgImg, dir):
             fileList.append(path)
 
     fileList = natsort.natsorted(fileList, key=lambda y: y.lower())
-
     for fileName in fileList:
         curPath = dir + fileName
         im = cv2.imread(curPath, 0)
