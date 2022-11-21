@@ -93,7 +93,7 @@ def getLinearCombination(aMat, uVec, K):
     return a
 
 def getClosest(avg, test, coefMat, kValue, uVec):
-    normal = test - avg
+    normal = np.subtract(test, avg)
     normal = np.reshape(normal, [65536, 1])
     testCoefficient = getLinearCombination(normal, uVec, kValue)[:, 0]
     absoluteDifference = np.empty([0, 1], dtype=float)
@@ -103,19 +103,17 @@ def getClosest(avg, test, coefMat, kValue, uVec):
         tempSum = np.linalg.norm(temp)
         absoluteDifference = np.append(absoluteDifference, tempSum)
     minValue = np.amin(absoluteDifference)
-    print(absoluteDifference)
-    print(minValue)
     index = np.where(absoluteDifference == minValue)
-    return index[0][0]
+    return index[0][0], minValue
 
-def predictImageIndex(testImagePath, trainingPath):
-    grayscaleDataset = "./data/gray/"
-    imgNum = convert2gray.convertToGray(trainingPath, grayscaleDataset)
-    avgImg = averageface.getAvgFace(grayscaleDataset)
-    testImg = convert2gray.getGrayscale(testImagePath)
-    covariant, AMatrix = getcovariant.getCovariant(avgImg, grayscaleDataset)
+def predictImageIndex(testImage, trainingPath):
+    avgImg, imgNum = averageface.getAvgFace(trainingPath)
+    testImg = cv2.cvtColor(testImage, cv2.COLOR_BGR2GRAY)
+    testImg = cv2.resize(testImg, (256, 256))
+    covariant, AMatrix = getcovariant.getCovariant(avgImg, trainingPath)
     eigenValArrayPath = "../ALGEO02-21109/data/eigen/eigenValue.txt"
     adjustedEigenVecArrayPath = "../ALGEO02-21109/data/eigen/eigenVec.txt"
+    startTime = time.time()
     if (exists(eigenValArrayPath) and exists(adjustedEigenVecArrayPath)):
         uVec = np.loadtxt(adjustedEigenVecArrayPath, dtype=float)
         eVal = np.loadtxt(eigenValArrayPath, dtype=float)
@@ -125,10 +123,11 @@ def predictImageIndex(testImagePath, trainingPath):
         uVec = getAdjustedVector(AMatrix, eVec)
         np.savetxt(eigenValArrayPath, eVal, fmt='%.20f')
         np.savetxt(adjustedEigenVecArrayPath, uVec, fmt='%.20f')
+    endTime = time.time() - startTime
     coef = getLinearCombination(AMatrix, uVec, imgNum)
-    closestIdx = getClosest(avgImg, testImg, coef, imgNum, uVec)
+    closestIdx, minValue = getClosest(avgImg, testImg, coef, imgNum, uVec)
     resultPath = getImagePath(closestIdx, trainingPath)
-    return resultPath
+    return minValue, endTime, resultPath
 
 def getImagePath(index, path):
     fileList = []
@@ -144,8 +143,10 @@ def getImagePath(index, path):
 
 if __name__ == "__main__":
     # myimg = averageface.getAvgFace("../ALGEO02-21109/data/gray/")
-    start = time.time()
     trainingDir = "../ALGEO02-21109/data/Face Recognition/"
     testImgPath = "../ALGEO02-21109/data/test/IMG_5754.jpg"
-    print(predictImageIndex(testImgPath, trainingDir))
-    print("--- %s seconds ---" % (time.time() - start))
+    testImg = cv2.imread(testImgPath)
+    res, t, path = predictImageIndex(testImg, trainingDir)
+    print(res)
+    print(t)
+    print(path)

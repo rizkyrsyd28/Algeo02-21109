@@ -49,6 +49,7 @@ def getCovariant(avgImg, dir):
     for fileName in fileList:
         curPath = dir + fileName
         im = cv2.imread(curPath, 0)
+        im = cv2.resize(im, (256, 256))
         temp = np.subtract(im, avgImg)
         temp = np.reshape(temp, [65536, 1])
         norm = np.append(norm, temp, axis=1)
