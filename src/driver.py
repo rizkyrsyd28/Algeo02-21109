@@ -128,8 +128,9 @@ def predict(testPath, trainingPath):
     testImg = cv2.imread(testPath, 0)
     covariant, amat = getcovariant.getCovariant(avgImg, trainingPath)
     x, y = amat.shape
-    eigenValArrayPath = "../ALGEO02-21109/data/eigen/eigenValue.txt"
-    adjustedEigenVecArrayPath = "../ALGEO02-21109/data/eigen/eigenVec.txt"
+    eigenValArrayPath = "../parahlimpik_image/eigen/eigenValue.txt"
+    adjustedEigenVecArrayPath = "../parahlimpik_image/eigen/eigenVec.txt"
+    
     if (exists(eigenValArrayPath) and exists(adjustedEigenVecArrayPath)):
         uVec = np.loadtxt(adjustedEigenVecArrayPath, dtype=float)
         eVal = np.loadtxt(eigenValArrayPath, dtype=float)
@@ -139,6 +140,7 @@ def predict(testPath, trainingPath):
         uVec = getAdjustedVector(amat, eVec)
         np.savetxt(eigenValArrayPath, eVal, fmt='%.20f')
         np.savetxt(adjustedEigenVecArrayPath, uVec, fmt='%.20f')
+
     coef = getLinearCombination(amat, uVec, int(y/2))
     closestIdx = getClosest(avgImg, testImg, coef, int(y/2), uVec)
     print("--- %s seconds ---" % (time.time() - start))

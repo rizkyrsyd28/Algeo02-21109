@@ -5,18 +5,11 @@ from PIL import Image, ImageTk
 # import tkinter.messagebox 
 import customtkinter
 import cv2
+import utils as utl
 # import time
 
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
-
-
-def crop_cam(mat):
-    height, width, _ = mat.shape
-    print(height, width, mat[0][0])
-    center = width//2
-    mat = mat[0:height, center - height//2: center + height//2]
-    return mat
 
 class App(customtkinter.CTk):
 
@@ -25,8 +18,11 @@ class App(customtkinter.CTk):
 
     def __init__(self):
         super().__init__()
+        
+        self.ImageTest = None
 
-        self.cap = cv2.VideoCapture(1)
+        self.cam = 0
+        self.cap = cv2.VideoCapture(self.cam)
         self.status_cam = False
         self.dir = ""
 
@@ -103,11 +99,19 @@ class App(customtkinter.CTk):
 
     # Theme Menu
         self.label_mode = customtkinter.CTkLabel(master=self.frame_left, text="Theme :")
-        self.label_mode.grid(row=10, column=0, pady=0, padx=20, sticky="w")
+        self.label_mode.grid(row=12, column=0, pady=0, padx=20, sticky="w")
 
         self.optionmenu_1 = customtkinter.CTkOptionMenu(master=self.frame_left,
                                                         values=["Light", "Dark", "System"],
                                                         command=self.change_appearance_mode)
+        self.optionmenu_1.grid(row=13, column=0, pady=10, padx=20, sticky="w")
+
+
+        self.label_mode = customtkinter.CTkLabel(master=self.frame_left, text="Camera :")
+        self.label_mode.grid(row=10, column=0, pady=0, padx=20, sticky="w")
+        self.optionmenu_1 = customtkinter.CTkOptionMenu(master=self.frame_left,
+                                                        values=['0', '1', '2'],
+                                                        command=self.change_cam)
         self.optionmenu_1.grid(row=11, column=0, pady=10, padx=20, sticky="w")
 
     # Frame Right
@@ -118,6 +122,9 @@ class App(customtkinter.CTk):
         self.frame_footer1.grid(row=2, column=0, padx=10, sticky='w', pady=10)
         self.frame_footer2 = customtkinter.CTkLabel(text=f"Time : {self.count_time}", master=self.frame_right)
         self.frame_footer2.grid(row=2, column=1, padx=10, sticky='w', pady=10)
+
+        self.frame_footer3 = customtkinter.CTkButton(text=f"Start", master=self.frame_right, command=self.start)
+        self.frame_footer3.grid(row=3, column=0, columnspan=2, padx=10, sticky='', pady=10)
 
         self.title_R1 = customtkinter.CTkLabel(master=self.frame_right,
                                               text="Test Image",
@@ -152,15 +159,15 @@ class App(customtkinter.CTk):
 
     def on_cam(self):
         if not self.status_cam:
-            self.cap = cv2.VideoCapture(1)
+            self.cap = cv2.VideoCapture(self.cam)
             self.camera_status = "On"
             self.status_cam = True
         if self.button_oncam.get() == 1 :
             img = self.cap.read()[1]
             imgBGR= cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-            imgcrop = crop_cam(imgBGR)
+            imgcrop = utl.crop_cam(imgBGR)
             cam = Image.fromarray(imgcrop)
-            self.imgTk = ImageTk.PhotoImage(image=cam)
+            self.imgTk = ImageTk.PhotoImage(image=cam.resize((500,500)))
             self.image_input.configure(image=self.imgTk)
             self.image_input.after(20,self.on_cam)
         # i+=1
@@ -186,11 +193,19 @@ class App(customtkinter.CTk):
 
     def open_folder(self):
         filename = filedialog.askdirectory()
-        # self.img = cv2.imread(self.filename.name)
-        self.dir = filename
+        self.dir = filename 
+        # DEBUG
+        print("[DEBUG] => You Choose Directory : " + self.dir)
+
+    def change_cam(self, choice):
+        self.cam = int(choice)
+        print("[DEBUG] => You Choose Camera " + choice)
 
     def change_appearance_mode(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
+    
+    def start(self):
+        print("[DEBUG] [WARN] => START ACTION !!!!")
 
     def on_closing(self, event=0):
         self.destroy()
