@@ -205,6 +205,10 @@ class App(customtkinter.CTk):
         customtkinter.set_appearance_mode(new_appearance_mode)
     
     def start(self):
+        self.imgTk = self.cap.read()[1]
+        self.image_input.configure(image='')
+        self.status_cam = False
+        self.camera_status = "Off"
         print("[DEBUG] [WARN] => START ACTION !!!!")
 
     def on_closing(self, event=0):
