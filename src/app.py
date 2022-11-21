@@ -6,6 +6,7 @@ from PIL import Image, ImageTk
 import customtkinter
 import cv2
 import utils as utl
+import main
 # import time
 
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
@@ -19,7 +20,7 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         
-        self.ImageTest = None
+        self.imgRes = None
 
         self.cam = 0
         self.cap = cv2.VideoCapture(self.cam)
@@ -163,12 +164,12 @@ class App(customtkinter.CTk):
             self.camera_status = "On"
             self.status_cam = True
         if self.button_oncam.get() == 1 :
-            img = self.cap.read()[1]
-            imgBGR= cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+            self.img = self.cap.read()[1]
+            imgBGR= cv2.cvtColor(self.img,cv2.COLOR_BGR2RGB)
             imgcrop = utl.crop_cam(imgBGR)
             cam = Image.fromarray(imgcrop)
-            self.imgTk = ImageTk.PhotoImage(image=cam.resize((500,500)))
-            self.image_input.configure(image=self.imgTk)
+            self.imgtk = ImageTk.PhotoImage(image=cam.resize((500,500)))
+            self.image_input.configure(image=self.imgtk)
             self.image_input.after(20,self.on_cam)
         # i+=1
         # print(i)
@@ -182,8 +183,10 @@ class App(customtkinter.CTk):
 
     def open_image(self):
         filename = filedialog.askopenfile()
+        # print(filename)
         # self.img = cv2.imread(self.filename.name)
         if (filename != None):
+            self.img = cv2.imread(filename.name)
             img = Image.open(filename.name)
             self.imgtk = ImageTk.PhotoImage(img.resize((400,400)))
             self.image_input.config(image = self.imgtk)
@@ -192,6 +195,7 @@ class App(customtkinter.CTk):
             
 
     def open_folder(self):
+        utl.temp_folder()
         filename = filedialog.askdirectory()
         self.dir = filename 
         # DEBUG
@@ -205,11 +209,20 @@ class App(customtkinter.CTk):
         customtkinter.set_appearance_mode(new_appearance_mode)
     
     def start(self):
-        if (self.status_cam):
-            print("[DEBUG] GET FROM CAM")
+        if self.imgtk != None : 
+            if (self.status_cam):
+                print("[DEBUG] GET FROM CAM")
+                self.result, self.count_time, self.imgRes = main.predictImageIndex(self.img, self.dir+"/")
+            else :
+                print("[DEBUG] GET FROM IMAGE")
+                self.result, self.count_time, self.imgRes = main.predictImageIndex(self.img, self.dir+"/")
+            img = cv2.imread(self.imgRes, 1)
+            imgBGR= cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
+            cam = Image.fromarray(imgBGR)
+            self.imgHasil = ImageTk.PhotoImage(image=cam.resize((500,500)))
+            self.image_output.configure(image=self.imgHasil)
         else :
-            print("[DEBUG] GET FROM IMAGE")
-        print("[DEBUG] [WARN] => START ACTION !!!!")
+            print("[DEBUG] [WARN] => START ACTION !!!!")
 
     def on_closing(self, event=0):
         self.destroy()

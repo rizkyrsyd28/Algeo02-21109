@@ -2,13 +2,11 @@ import os
 import cv2
 import numpy as np
 
-def input_folder():
-    gray = "parahlimpik_image/gray/"
-    eigen = "parahlimpik_image/eigen/"
+def temp_folder():
+    eigen = "parahlimpik/eigen/"
 
     currentPath = os.getcwd()
-    path = os.path.join(currentPath, gray) 
-    os.mkdir(path)
+    print(currentPath)
     path = os.path.join(currentPath, eigen) 
     os.mkdir(path)
 
