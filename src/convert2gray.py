@@ -30,13 +30,10 @@ def convertToGray(dir, output):
         c+=1;
     return c
 
-def convertTest(dir):
+def getGrayscale(dir):
     testImg = cv2.imread(dir, 0)
     testImg = cv2.resize(testImg, (256, 256))
-    grayscalePath = "./data/test/testImg.png"
-    if os.path.exists(grayscalePath):
-        os.remove(grayscalePath)
-    cv2.imwrite(grayscalePath, testImg)
+    return testImg
 
 if __name__ == "__main__":
     path = "D:\ITB\Semester 3\Aljabar Liniear dan Geometri\Algeo02-21109\data\\test\IMG-20221117-WA0003.jpg"

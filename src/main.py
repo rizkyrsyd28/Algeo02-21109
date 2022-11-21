@@ -112,8 +112,7 @@ def predictImageIndex(testImagePath, trainingPath):
     grayscaleDataset = "./data/gray/"
     imgNum = convert2gray.convertToGray(trainingPath, grayscaleDataset)
     avgImg = averageface.getAvgFace(grayscaleDataset)
-    convert2gray.convertTest(testImagePath)
-    testImg = cv2.imread("./data/test/testImg.png", 0)
+    testImg = convert2gray.getGrayscale(testImagePath)
     covariant, AMatrix = getcovariant.getCovariant(avgImg, grayscaleDataset)
     eigenValArrayPath = "../ALGEO02-21109/data/eigen/eigenValue.txt"
     adjustedEigenVecArrayPath = "../ALGEO02-21109/data/eigen/eigenVec.txt"
