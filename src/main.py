@@ -143,8 +143,8 @@ def getImagePath(index, path):
 
 if __name__ == "__main__":
     # myimg = averageface.getAvgFace("../ALGEO02-21109/data/gray/")
-    trainingDir = "../ALGEO02-21109/data/Face Recognition/"
-    testImgPath = "../ALGEO02-21109/data/test/IMG_5754.jpg"
+    trainingDir = "data/Face Recognition/"
+    testImgPath = "data/test/IMG_5754.jpg"
     testImg = cv2.imread(testImgPath)
     res, t, path = predictImageIndex(testImg, trainingDir)
     print(res)
