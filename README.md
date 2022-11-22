@@ -6,6 +6,7 @@ Tugas Besar Mata Kuliah IF2123 Aljabar Linier dan Geometri : Aplikasi Nilai Eige
 ## Table of Contents
 * [General Info](#general-information)
 * [Technologies Used](#technologies-used)
+* [Dependencies](#dependencies)
 * [Features](#features)
 * [Screenshots](#screenshots)
 * [Setup](#setup)
