@@ -111,8 +111,8 @@ def predictImageIndex(testImage, trainingPath):
     testImg = cv2.cvtColor(testImage, cv2.COLOR_BGR2GRAY)
     testImg = cv2.resize(testImg, (256, 256))
     covariant, AMatrix = getcovariant.getCovariant(avgImg, trainingPath)
-    eigenValArrayPath = "../parahlimpik/eigen/eigenValue.txt"
-    adjustedEigenVecArrayPath = "../parahlimpik/eigen/eigenVec.txt"
+    eigenValArrayPath = "../data/eigen/eigenValue.txt"
+    adjustedEigenVecArrayPath = "../data/eigen/eigenVec.txt"
     startTime = time.time()
     if (exists(eigenValArrayPath) and exists(adjustedEigenVecArrayPath)):
         uVec = np.loadtxt(adjustedEigenVecArrayPath, dtype=float)
@@ -143,8 +143,8 @@ def getImagePath(index, path):
 
 if __name__ == "__main__":
     # myimg = averageface.getAvgFace("../ALGEO02-21109/data/gray/")
-    trainingDir = "../ALGEO02-21109/data/Face Recognition/"
-    testImgPath = "../ALGEO02-21109/data/test/IMG_5754.jpg"
+    trainingDir = "../data/Face Recognition/"
+    testImgPath = "../data/test/IMG_5754.jpg"
     testImg = cv2.imread(testImgPath)
     res, t, path = predictImageIndex(testImg, trainingDir)
     print(res)
