@@ -28,6 +28,15 @@ Tugas Besar Mata Kuliah IF2123 Aljabar Linier dan Geometri : Aplikasi Nilai Eige
 - Pillow
 - Natsort
 
+## Dependencies
+- NumPy
+- OpenCV2
+- Tkinter
+- Pillow
+- Natsort
+```bash
+pip install numpy opencv-python customtkinter==0.3 Pillow natsort
+```
 
 ## Features
 - Face Recognition (with camera)
