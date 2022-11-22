@@ -111,8 +111,8 @@ def predictImageIndex(testImage, trainingPath):
     testImg = cv2.cvtColor(testImage, cv2.COLOR_BGR2GRAY)
     testImg = cv2.resize(testImg, (256, 256))
     covariant, AMatrix = getcovariant.getCovariant(avgImg, trainingPath)
-    eigenValArrayPath = "../ALGEO-2/eigen_parahlimpik/eigenValue.txt"
-    adjustedEigenVecArrayPath = "../ALGEO-2/eigen_parahlimpik/eigenVec.txt"
+    eigenValArrayPath = "eigen_parahlimpik/eigenValue.txt"
+    adjustedEigenVecArrayPath = "eigen_parahlimpik/eigenVec.txt"
     startTime = time.time()
     if (exists(eigenValArrayPath) and exists(adjustedEigenVecArrayPath)):
         uVec = np.loadtxt(adjustedEigenVecArrayPath, dtype=float)

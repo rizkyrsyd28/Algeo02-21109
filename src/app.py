@@ -180,7 +180,7 @@ class App(customtkinter.CTk):
         if (filename != None):
             self.img = cv2.imread(filename.name)
             img = Image.open(filename.name)
-            self.imgtk = ImageTk.PhotoImage(img.resize((400,400)))
+            self.imgtk = ImageTk.PhotoImage(img.resize((500,500)))
             self.image_input.config(image = self.imgtk)
         else:
             self.image_input.config(image = '')
@@ -213,6 +213,10 @@ class App(customtkinter.CTk):
             cam = Image.fromarray(imgBGR)
             self.imgHasil = ImageTk.PhotoImage(image=cam.resize((500,500)))
             self.image_output.configure(image=self.imgHasil)
+            self.frame_footer1.config(text=f"Result : {self.result}")
+            self.frame_footer2.config(text=f"Time : {self.count_time} second")
+            
+        
         else :
             print("[DEBUG] [WARN] => START ACTION !!!!")
 
