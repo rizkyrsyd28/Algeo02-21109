@@ -31,6 +31,7 @@ Tugas Besar Mata Kuliah IF2123 Aljabar Linier dan Geometri : Aplikasi Nilai Eige
 
 ## Features
 - Face Recognition (with camera)
+- Light and dark theme
 
 ## Screenshots
 ![Screenshot 1](https://github.com/rizkyrsyd28/Algeo02-21109/blob/main/Assets/Screenshot%202022-11-22%20193051.png)
