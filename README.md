@@ -1,7 +1,7 @@
 # Algeo02-21109
 Tugas Besar Mata Kuliah IF2123 Aljabar Linier dan Geometri : Aplikasi Nilai Eigen dan EigenFace pada Pengenalan Wajah
 
-# Parahlimpic Face Recognition
+# Parahlimpik Face Recognition
 > Tugas Besar 2 IF 2123 Aljabar Linier dan Geometri Aplikasi Nilai Eigen dan EigenFace pada Pengenalan Wajah (Face Recognition) Semester I Tahun 2022/2023
 ## Table of Contents
 * [General Info](#general-information)
