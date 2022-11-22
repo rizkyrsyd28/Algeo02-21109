@@ -149,14 +149,6 @@ class App(customtkinter.CTk):
         self.image_output = customtkinter.CTkLabel(master = self.subframeR_2, text="Output Image", width=400, height=400)
         self.image_output.grid(row=1, column=0, pady=10, padx=10)
 
-    # def camera(self) : 
-    #     img = self.cap.read()[1]
-    #     imgBGR= cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
-    #     imgBGR = crop_cam(imgBGR)
-    #     cam = Image.fromarray(imgBGR)
-    #     imgTk = ImageTk.PhotoImage(image=cam.resize((400,400)))
-    #     self.image_input.configure(image=imgTk)
-
 
     def on_cam(self):
         if not self.status_cam:
