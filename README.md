@@ -33,9 +33,8 @@ Tugas Besar Mata Kuliah IF2123 Aljabar Linier dan Geometri : Aplikasi Nilai Eige
 - Face Recognition (with camera)
 
 ## Screenshots
-![Example screenshot](./img/screenshot.png)
-<!-- If you have screenshots you'd like to share, include them here. -->
-
+![Screenshot 1](https://github.com/rizkyrsyd28/Algeo02-21109/blob/main/Assets/Screenshot%202022-11-22%20193051.png)
+![Screenshot 2](https://github.com/rizkyrsyd28/Algeo02-21109/blob/main/Assets/Screenshot%202022-11-22%20193146.png)
 
 ## Setup
 1. Install tech stack yang diperlukan (Python, OpenCV2, NumPy, Tkinter, Pillow, Natsort);
