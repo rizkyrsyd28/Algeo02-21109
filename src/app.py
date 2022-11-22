@@ -7,6 +7,7 @@ import customtkinter
 import cv2
 import utils as utl
 import main
+import time
 # import time
 
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
@@ -201,18 +202,20 @@ class App(customtkinter.CTk):
         customtkinter.set_appearance_mode(new_appearance_mode)
     
     def start(self):
-        if self.imgtk != None : 
+        if self.imgtk != None :
+            start = time.time() 
             if (self.status_cam):
                 print("[DEBUG] GET FROM CAM")
                 self.result, self.count_time, self.imgRes = main.predictImageIndex(self.img, self.dir+"/")
             else :
                 print("[DEBUG] GET FROM IMAGE")
-                self.result, self.count_time, self.imgRes = main.predictImageIndex(self.img, self.dir+"/")
+                self.result, time_dump, self.imgRes = main.predictImageIndex(self.img, self.dir+"/")
             img = cv2.imread(self.imgRes, 1)
             imgBGR= cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
             cam = Image.fromarray(imgBGR)
             self.imgHasil = ImageTk.PhotoImage(image=cam.resize((500,500)))
             self.image_output.configure(image=self.imgHasil)
+            self.count_time = time.time() - start
             self.frame_footer1.config(text=f"Result : {self.result}")
             self.frame_footer2.config(text=f"Time : {self.count_time} second")
             
