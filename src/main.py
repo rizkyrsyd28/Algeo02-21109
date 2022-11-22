@@ -7,7 +7,7 @@ from os.path import exists
 import os
 import natsort
 import time
-import convert2gray
+import shutil
 
 def qr(A):
     m, n = A.shape
@@ -111,13 +111,23 @@ def predictImageIndex(testImage, trainingPath):
     testImg = cv2.cvtColor(testImage, cv2.COLOR_BGR2GRAY)
     testImg = cv2.resize(testImg, (256, 256))
     covariant, AMatrix = getcovariant.getCovariant(avgImg, trainingPath)
-    eigenValArrayPath = "eigen_parahlimpik/eigenValue.txt"
-    adjustedEigenVecArrayPath = "eigen_parahlimpik/eigenVec.txt"
+    folderName = os.path.basename(os.path.dirname(trainingPath))
+    eigenValArrayPath = "eigen_parahlimpik/eigenValue" + folderName + ".txt"
+    adjustedEigenVecArrayPath = "eigen_parahlimpik/eigenVec" + folderName + ".txt"
     startTime = time.time()
     if (exists(eigenValArrayPath) and exists(adjustedEigenVecArrayPath)):
         uVec = np.loadtxt(adjustedEigenVecArrayPath, dtype=float)
         eVal = np.loadtxt(eigenValArrayPath, dtype=float)
     else:
+        for filename in os.listdir("eigen_parahlimpik/"):
+            file_path = os.path.join("eigen_parahlimpik/", filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
         eVal, eVec = eigenValVec(covariant)
         eVal, eVec = sortEigenVectors(eVal, eVec)
         uVec = getAdjustedVector(AMatrix, eVec)

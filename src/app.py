@@ -30,9 +30,8 @@ class App(customtkinter.CTk):
 
         self.result = 'NaN'
         self.count_time = 'NaN'
-        self.camera_status = 'Off'
 
-        self.title("Eigenface")
+        self.title("Eigenface Parahlimpik")
         self.geometry(f"{App.WIDTH}x{App.HEIGHT}")
         self.protocol("WM_DELETE_WINDOW", self.on_closing)  # call .on_closing() when app gets closed
 
@@ -56,7 +55,7 @@ class App(customtkinter.CTk):
         # self.frame_left.grid_rowconfigure(11, minsize=10)  # empty row with minsize as spacing
 
         self.label_1 = customtkinter.CTkLabel(master=self.frame_left,
-                                              text="EigenFace",
+                                              text="Parahlimpik",
                                               text_font=("SF Pro Text", 16, "bold"))  # font name and size in px
         self.label_1.grid(row=1, column=0, pady=20, padx=20)
 
@@ -92,7 +91,7 @@ class App(customtkinter.CTk):
         self.title_oncam.grid(row=6, column=0, pady=10, padx=20)
 
         self.button_oncam = customtkinter.CTkSwitch(master=self.frame_left,
-                                                text=f"Camera {self.camera_status}",
+                                                text=f"Camera",
                                                 text_font=("SF Pro Text", 10),
                                                 command=self.on_cam, 
                                                 onvalue=1, 
@@ -154,7 +153,6 @@ class App(customtkinter.CTk):
     def on_cam(self):
         if not self.status_cam:
             self.cap = cv2.VideoCapture(self.cam)
-            self.camera_status = "On"
             self.status_cam = True
         if self.button_oncam.get() == 1 :
             self.img = self.cap.read()[1]
@@ -170,7 +168,6 @@ class App(customtkinter.CTk):
         else:
             self.image_input.configure(image='')
             self.status_cam = False
-            self.camera_status = "Off"
             self.cap.release()
             return
 
@@ -191,12 +188,9 @@ class App(customtkinter.CTk):
         utl.temp_folder()
         filename = filedialog.askdirectory()
         self.dir = filename 
-        # DEBUG
-        print("[DEBUG] => You Choose Directory : " + self.dir)
 
     def change_cam(self, choice):
         self.cam = int(choice)
-        print("[DEBUG] => You Choose Camera " + choice)
 
     def change_appearance_mode(self, new_appearance_mode):
         customtkinter.set_appearance_mode(new_appearance_mode)
@@ -205,10 +199,8 @@ class App(customtkinter.CTk):
         if self.imgtk != None :
             start = time.time() 
             if (self.status_cam):
-                print("[DEBUG] GET FROM CAM")
                 self.result, self.count_time, self.imgRes = main.predictImageIndex(self.img, self.dir+"/")
             else :
-                print("[DEBUG] GET FROM IMAGE")
                 self.result, time_dump, self.imgRes = main.predictImageIndex(self.img, self.dir+"/")
             img = cv2.imread(self.imgRes, 1)
             imgBGR= cv2.cvtColor(img,cv2.COLOR_BGR2RGB)
@@ -219,9 +211,6 @@ class App(customtkinter.CTk):
             self.frame_footer1.config(text=f"Result : {self.result}")
             self.frame_footer2.config(text=f"Time : {self.count_time} second")
             
-        
-        else :
-            print("[DEBUG] [WARN] => START ACTION !!!!")
 
     def on_closing(self, event=0):
         self.destroy()
